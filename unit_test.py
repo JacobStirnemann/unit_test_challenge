@@ -14,3 +14,14 @@ import pytest # type: ignore
 def test_symbol(symbol, expected):
     pattern = r"^[A-Z]{1,7}$"
     assert bool(re.fullmatch(pattern, symbol)) == expected
+
+#Chart Type Test - Should be 1 or 2
+@pytest.mark.parametrize("chart_input,expected", [
+    ("1", True),
+    ("2", True),
+    ("3", False),
+    ("0", False),
+    ("a", False),
+])
+def test_chart_type_input(chart_input, expected):
+    assert chart_input in ["1", "2"] == expected
