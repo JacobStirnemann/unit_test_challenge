@@ -1,5 +1,7 @@
 import re
 import pytest # type: ignore
+from datetime import datetime
+from utils import validate_date_range
 
 #Symbol test
 @pytest.mark.parametrize("symbol,expected", [
@@ -36,3 +38,28 @@ def test_chart_type_input(chart_input, expected):
 ])
 def test_time_series_input(series_input, expected):
     assert series_input in ["1", "2", "3", "4"] == expected
+
+#Date Format Test
+@pytest.mark.parametrize("date_str,expected", [
+    ("2024-01-01", True),
+    ("1999-12-31", True),
+    ("2024/01/01", False),
+    ("01-01-2024", False),
+    ("2024-13-01", False),  # invalid month
+    ("abcd-ef-gh", False),
+])
+def test_date_format(date_str, expected):
+    try:
+        datetime.strptime(date_str, "%Y-%m-%d")
+        result = True
+    except ValueError:
+        result = False
+    assert result == expected
+
+@pytest.mark.parametrize("start_date, end_date, expected", [
+    ("2024-01-01", "2024-02-01", True),
+    ("2024-05-10", "2024-04-10", False),
+    ("2024-01-01", "not-a-date", False),
+])
+def test_validate_date_range(start_date, end_date, expected):
+    assert validate_date_range(start_date, end_date) == expected
