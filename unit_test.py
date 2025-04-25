@@ -25,3 +25,14 @@ def test_symbol(symbol, expected):
 ])
 def test_chart_type_input(chart_input, expected):
     assert chart_input in ["1", "2"] == expected
+
+#Time Series Test - Should be 1-4
+@pytest.mark.parametrize("series_input,expected", [
+    ("1", True),
+    ("4", True),
+    ("5", False),
+    ("0", False),
+    ("x", False),
+])
+def test_time_series_input(series_input, expected):
+    assert series_input in ["1", "2", "3", "4"] == expected
